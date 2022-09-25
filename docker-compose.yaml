@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  app:
+    build: ./docker
+    # container_name: laravel-php8.1
+    image: server
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  db:
+    image: mariadb
+    ports:
+      - 3307:3306
+    # container_name: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: teplo
+      MYSQL_USER: teplo
+      MYSQL_PASSWORD: teplo
+    volumes:
+      - ./docker/db:/var/lib/mysql
+      - ./docker/mysql-config.cnf:/etc/mysql/conf.d/config.cnf
